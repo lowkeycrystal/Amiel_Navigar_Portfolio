@@ -454,13 +454,6 @@ section {
   font-size: 1.1rem;
 }
 .hero-sub p { margin-bottom: 1.5rem; }
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  color: var(--text-muted);
-}
 
 .section-title {
   font-size: 2.5rem;
