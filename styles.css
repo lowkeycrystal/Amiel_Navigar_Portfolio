@@ -579,8 +579,7 @@ section {
   justify-content: space-between;
   align-items: center;
   padding: 2rem 0;
-  border-bottom: 1px solid var(--border-color);
-}
+  border-bottom: 1px solid var(--border-color); }
 .exp-role { font-weight: 500; font-family: var(--font-sans); }
 .exp-date { margin-bottom: 0; }
 
