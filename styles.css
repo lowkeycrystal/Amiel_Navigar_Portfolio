@@ -329,7 +329,7 @@ section {
 
 /* Asset Box (Links to Case Study) */
 .asset-box {
-  display: block; /* Important since it's an <a> tag now */
+  display: block;
   position: relative;
   background-color: var(--surface-color);
   border: 1px solid rgba(214, 90, 49, 0.4); 
