@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
           target.startsWith('#') ||
           target.startsWith('http') ||
           target.startsWith('blob:') ||
+          target.startsWith('asset:') ||
           this.getAttribute('target') === '_blank' ||
           e.ctrlKey || e.metaKey
         ) return;
