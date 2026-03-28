@@ -12,38 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Page Transition Logic (Harsh Wipe)
+  // 2. Page Transition Logic
   const transitionEl = document.querySelector('.page-transition');
   if (transitionEl) {
     // Animate out on load
     setTimeout(() => {
       transitionEl.classList.add('is-loaded');
     }, 150);
-
-    // Animate in on internal link click
-    document.querySelectorAll('a').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const target = this.getAttribute('href');
-        // Skip transition for external links, anchor links, or new tabs
-        if (
-          !target ||
-          target.startsWith('#') ||
-          target.startsWith('http') ||
-          target.startsWith('blob:') ||
-          target.startsWith('asset:') ||
-          this.getAttribute('target') === '_blank' ||
-          e.ctrlKey || e.metaKey
-        ) return;
-
-        e.preventDefault();
-        transitionEl.classList.remove('is-loaded');
-        transitionEl.classList.add('is-leaving');
-        
-        setTimeout(() => {
-          window.location.href = target;
-        }, 600); // Matches the CSS transition duration
-      });
-    });
+    // Note: Removed JS link click interception to rely on native browser routing within the builder frame.
   }
 
   // 3. Glassmorphism Header on Scroll
