@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       transitionEl.classList.add('is-loaded');
     }, 150);
-    // Note: Removed JS link click interception to rely on native browser routing within the builder frame.
   }
 
   // 3. Glassmorphism Header on Scroll

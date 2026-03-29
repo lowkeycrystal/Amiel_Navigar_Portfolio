@@ -335,7 +335,6 @@ section {
   border: 1px solid rgba(214, 90, 49, 0.4); 
   aspect-ratio: 16/9;
   overflow: hidden;
-  /* Subtle background grid utilizing css variable for light/dark */
   background-image: 
     linear-gradient(rgba(150,150,150, var(--grid-opacity)) 1px, transparent 1px),
     linear-gradient(90deg, rgba(150,150,150, var(--grid-opacity)) 1px, transparent 1px);
@@ -413,7 +412,7 @@ section {
   transition: opacity 0.4s ease, transform 0.4s ease;
   transform: translateY(10px);
   z-index: 10;
-  color: #f0f0f0; /* Always light text on hover overlay */
+  color: #f0f0f0;
 }
 
 .asset-box:hover .project-hover {
@@ -573,6 +572,18 @@ section {
   max-width: 100%;
   max-height: 70vh;
   object-fit: contain;
+}
+
+/* Media Gallery Grid for Multi-Asset Projects */
+.media-gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .media-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Work Page */
