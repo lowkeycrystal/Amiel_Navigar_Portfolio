@@ -30,34 +30,71 @@
 </header>
 
 <main>
-  <section class="hero fade-in-up">
-    <div class="container">
-      <div class="label">[MULTIMEDIA DESIGNER]</div>
-      <h1 class="hero-title">Crafting<br>the <span class="accent-italic">Imperfect</span></h1>
-      <div class="hero-sub">
-        <p>Graphic design & video work rooted in brutalist aesthetics and wabi-sabi philosophy. Embracing rawness, impermanence, and the beauty of what's unfinished.</p>
-        <a href="work.html" class="link-btn">VIEW WORK <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg></a>
+  <section class="hero slide-up-group">
+    <div class="container relative">
+      <div class="label inline-flex items-center gap-2"><span class="pulsing-dot"></span> [MULTIMEDIA DESIGNER]</div>
+      <h1 class="hero-title display-xl">
+        <span class="block overflow-hidden"><span class="reveal-text">Crafting</span></span>
+        <span class="block overflow-hidden"><span class="reveal-text">the <span class="accent-outline">Imperfect</span></span></span>
+      </h1>
+      <div class="hero-sub mt-3 flex-row-responsive">
+        <p class="fade-in-up stagger-1 max-w-md text-lg text-muted">
+          Graphic design & video work rooted in brutalist aesthetics and wabi-sabi philosophy. Embracing rawness, impermanence, and the beauty of what's unfinished.
+        </p>
+        <div class="fade-in-up stagger-2">
+          <a href="work.html" class="circle-btn">
+            <span class="circle-btn-text">VIEW<br>WORK</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="marquee">
+  <div class="marquee py-2 border-y my-2">
     <div class="marquee-content">
-      <span class="marquee-text">NOTHING IS PERMANENT • CRAFTING THE IMPERFECT • </span>
-      <span class="marquee-text">EMBRACING RAWNESS • FINDING BEAUTY IN SIMPLICITY • </span>
-      <span class="marquee-text">NOTHING IS PERMANENT • CRAFTING THE IMPERFECT • </span>
-      <span class="marquee-text">EMBRACING RAWNESS • FINDING BEAUTY IN SIMPLICITY • </span>
+      <span class="marquee-text">NOTHING IS PERMANENT • CRAFTING THE IMPERFECT • EMBRACING RAWNESS • FINDING BEAUTY IN SIMPLICITY • </span>
+      <span class="marquee-text">NOTHING IS PERMANENT • CRAFTING THE IMPERFECT • EMBRACING RAWNESS • FINDING BEAUTY IN SIMPLICITY • </span>
     </div>
   </div>
 
-  <section class="recent-projects fade-in-up">
+  <section class="about-snippet fade-in-up mt-4">
+    <div class="container split-layout align-center">
+      <div class="split-visuals relative">
+        <div class="asset-box box-square">
+           <video autoplay loop muted playsinline class="asset-media parallax-img">
+             <source src="assets/ds1v2otmm-BPI AIA 1" type="video/mp4">
+           </video>
+           <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
+           <div class="crosshair"></div>
+        </div>
+      </div>
+      <div class="split-text">
+        <div class="label">[ABOUT ME]</div>
+        <h2 class="large-heading mb-2">Design that feels <span class="accent-italic">alive.</span></h2>
+        <p class="text-muted text-lg mb-3">
+          I build digital experiences and visual identities that don't hide their structure. Let's strip away the unnecessary polish and reveal the honest core of your brand.
+        </p>
+        <a href="about.html" class="btn-outline">
+          READ MY STORY <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="recent-projects mt-4">
     <div class="container">
-      <div class="label">[SELECTED WORK]</div>
-      <h2 class="section-title">Recent Projects</h2>
+      <div class="flex justify-between items-end mb-3 fade-in-up">
+        <div>
+          <div class="label">[SELECTED WORK]</div>
+          <h2 class="section-title mb-0">Recent Projects</h2>
+        </div>
+        <a href="work.html" class="link-btn hidden-mobile">ALL PROJECTS <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg></a>
+      </div>
       
-      <div class="bento-grid">
-        <a href="project-becker.html" class="asset-box span-3" data-category="graphic">
-           <img src="assets/1774738706550-Becker's Event Announcement" alt="Becker's Event Announcement" class="asset-media" referrerPolicy="no-referrer">
+      <div class="bento-grid fade-in-up">
+        <a href="project-becker.html" class="asset-box span-3 box-square grayscale-reveal reveal-img" data-category="graphic">
+           <img src="assets/1774738706550-Becker's Event Announcement" alt="Becker's Event Announcement" class="asset-media parallax-img" referrerPolicy="no-referrer">
            <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
            <div class="crosshair"></div>
            <div class="project-hover">
@@ -65,30 +102,30 @@
              <span class="project-year">Graphic 2026</span>
           </div>
         </a>
-        <a href="project-mgma.html" class="asset-box span-3" data-category="video">
-          <video autoplay loop muted playsinline class="asset-media">
-            <source src="assets/1774738684886-MGMA Wrap Up" type="video/mp4">
+        <a href="project-veega.html" class="asset-box span-3 box-square grayscale-reveal reveal-img" data-category="animation">
+          <video autoplay loop muted playsinline class="asset-media parallax-img">
+            <source src="assets/1774738660376-Veega Instagram Ad" type="video/mp4">
           </video>
           <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
           <div class="crosshair"></div>
           <div class="project-hover">
-             <h3 class="project-title">MGMA Wrap Up Video</h3>
-             <span class="project-year">Video 2025</span>
+             <h3 class="project-title">Veega Ad</h3>
+             <span class="project-year">Animation 2023</span>
           </div>
         </a>
-        <a href="project-veega.html" class="asset-box span-3" data-category="animation">
-           <video autoplay loop muted playsinline class="asset-media">
-             <source src="assets/1774738660376-Veega Instagram Ad" type="video/mp4">
+        <a href="project-mgma.html" class="asset-box span-3 box-square grayscale-reveal reveal-img" data-category="video">
+           <video autoplay loop muted playsinline class="asset-media parallax-img">
+             <source src="assets/1774738684886-MGMA Wrap Up" type="video/mp4">
            </video>
            <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
            <div class="crosshair"></div>
            <div class="project-hover">
-             <h3 class="project-title">Veega Instagram Ad</h3>
-             <span class="project-year">Animation 2023</span>
+             <h3 class="project-title">MGMA Wrap Up</h3>
+             <span class="project-year">Video 2025</span>
           </div>
         </a>
-        <a href="project-samsung.html" class="asset-box span-3" data-category="graphic">
-           <img src="assets/o6s4kgm2s-Samsung Ads Socmed - 1. Cover.png" alt="Samsung Product Ad" class="asset-media" referrerPolicy="no-referrer">
+        <a href="project-samsung.html" class="asset-box span-3 box-square grayscale-reveal reveal-img" data-category="graphic">
+           <img src="assets/o6s4kgm2s-Samsung Ads Socmed - 1. Cover.png" alt="Samsung Product Ad" class="asset-media parallax-img" referrerPolicy="no-referrer">
            <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
            <div class="crosshair"></div>
            <div class="project-hover">
@@ -97,66 +134,76 @@
           </div>
         </a>
       </div>
-      <div class="align-right mt-2">
-         <a href="work.html" class="link-btn">ALL PROJECTS <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg></a>
+      <div class="text-center mt-3 hidden-desktop fade-in-up">
+         <a href="work.html" class="btn-outline w-full justify-center">ALL PROJECTS <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg></a>
       </div>
     </div>
   </section>
 
-  <section class="philosophy fade-in-up">
-    <div class="container split-layout align-center">
-      <div class="split-text">
-        <div class="label">[PHILOSOPHY]</div>
-        <h2 class="large-heading">Nothing lasts, nothing is finished, nothing is <span class="accent-italic">perfect.</span></h2>
-        <p class="mt-1 text-muted">My work lives at the intersection of industrial design thinking and the Japanese aesthetic of wabi-sabi — finding depth in simplicity, character in wear, and meaning in transience.</p>
-      </div>
-      <div class="split-visuals">
-         <a href="about.html" class="asset-box box-tall">
-             <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
-             <div class="crosshair"></div>
-             <div class="project-hover">
-               <h3 class="project-title">Studio Process</h3>
-               <span class="project-year">Behind the scenes</span>
-            </div>
-         </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="capabilities fade-in-up">
+  <section class="capabilities mt-4 fade-in-up border-t">
     <div class="container">
-       <div class="label">[CAPABILITIES]</div>
-       <h2 class="section-title">What I Do</h2>
-       <div class="grid-4">
-         <div class="capability-item">
-           <div class="cap-num label">01</div>
-           <h3 class="cap-title">Graphic Design</h3>
-           <p class="text-muted">Brand identities, posters, editorial, packaging</p>
+       <div class="flex justify-between items-start mb-3">
+         <div class="label">[CAPABILITIES]</div>
+         <h2 class="section-title mb-0 max-w-sm text-right">What I Do</h2>
+       </div>
+       <div class="interactive-list">
+         <div class="list-item hover-trigger">
+           <div class="list-num label">01</div>
+           <h3 class="list-title text-huge">Graphic Design</h3>
+           <p class="list-desc text-muted hidden-mobile">Brand identities, posters, editorial, packaging</p>
+           <div class="list-arrow">
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+           </div>
+           <div class="hover-image-container">
+              <img src="assets/aqo20yis1-Amzonex Socmed - 14001.png" alt="Graphic Design" referrerPolicy="no-referrer">
+           </div>
          </div>
-         <div class="capability-item">
-           <div class="cap-num label">02</div>
-           <h3 class="cap-title">Motion Design</h3>
-           <p class="text-muted">Animations, title sequences, motion graphics</p>
+         <div class="list-item hover-trigger">
+           <div class="list-num label">02</div>
+           <h3 class="list-title text-huge">Motion Design</h3>
+           <p class="list-desc text-muted hidden-mobile">Animations, title sequences, motion graphics</p>
+           <div class="list-arrow">
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+           </div>
+           <div class="hover-image-container">
+              <video autoplay loop muted playsinline><source src="assets/udnfpj28r-CPU JPIA Logo Reveal" type="video/mp4"></video>
+           </div>
          </div>
-         <div class="capability-item">
-           <div class="cap-num label">03</div>
-           <h3 class="cap-title">Video Production</h3>
-           <p class="text-muted">Short films, campaigns, visual essays</p>
+         <div class="list-item hover-trigger">
+           <div class="list-num label">03</div>
+           <h3 class="list-title text-huge">Video Production</h3>
+           <p class="list-desc text-muted hidden-mobile">Short films, campaigns, visual essays</p>
+           <div class="list-arrow">
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+           </div>
+           <div class="hover-image-container">
+              <video autoplay loop muted playsinline><source src="assets/1774739307199-Pumpkin Taste Test - Cultural Video" type="video/mp4"></video>
+           </div>
          </div>
-         <div class="capability-item">
-           <div class="cap-num label">04</div>
-           <h3 class="cap-title">Art Direction</h3>
-           <p class="text-muted">Visual strategy, creative direction, concepts</p>
+         <div class="list-item hover-trigger border-b-0">
+           <div class="list-num label">04</div>
+           <h3 class="list-title text-huge">Art Direction</h3>
+           <p class="list-desc text-muted hidden-mobile">Visual strategy, creative direction, concepts</p>
+           <div class="list-arrow">
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+           </div>
+           <div class="hover-image-container">
+              <img src="assets/9fp6qgzp5-Al-Morjan Park Instagram Feed - image_original (4).png" alt="Art Direction" referrerPolicy="no-referrer">
+           </div>
          </div>
        </div>
     </div>
   </section>
 
-  <section class="cta-section fade-in-up">
+  <section class="cta-section fade-in-up mt-4 pb-4">
     <div class="container text-center">
       <div class="label">[LET'S COLLABORATE]</div>
-      <h2 class="mega-title">Have a project<br>in mind?</h2>
-      <a href="contact.html" class="btn-outline mt-2">GET IN TOUCH <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg></a>
+      <h2 class="mega-title inline-block">Have a project<br>in mind?</h2>
+      <div class="mt-3">
+        <a href="contact.html" class="btn-outline">
+          GET IN TOUCH <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7"/></svg>
+        </a>
+      </div>
     </div>
   </section>
 </main>

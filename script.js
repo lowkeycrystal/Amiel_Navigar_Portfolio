@@ -15,12 +15,10 @@ function setSafeTheme(theme) {
   }
 }
 
-// Apply theme immediately to prevent FOUC
 const currentTheme = getSafeTheme();
 document.documentElement.setAttribute('data-theme', currentTheme);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Theme Toggle Logic (High Contrast Light/Dark Mode) with fallback
   const themeBtn = document.getElementById('theme-toggle');
   
   if (document.body) {
@@ -41,16 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Page Transition Logic
   const transitionEl = document.querySelector('.page-transition');
   if (transitionEl) {
-    // Animate out on load
     setTimeout(() => {
       transitionEl.classList.add('is-loaded');
     }, 150);
   }
 
-  // 3. Glassmorphism Header on Scroll
   const header = document.getElementById('main-header');
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -62,11 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 
-  // 4. Intersection Observer for subtle scroll animations
+  // Unified Observer for fade-ins and stagger animations
   const observerOptions = {
     root: null,
-    rootMargin: '0px',
-    threshold: 0.15
+    rootMargin: '0px 0px -50px 0px',
+    threshold: 0.1
   };
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
@@ -76,10 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, observerOptions);
-  const animatedElements = document.querySelectorAll('.fade-in-up');
+  
+  const animatedElements = document.querySelectorAll('.fade-in-up, .slide-up-group');
   animatedElements.forEach(el => observer.observe(el));
 
-  // 5. Functional Filtering for Work Page
+  // Work Page Filters
   const filterBtns = document.querySelectorAll('.filter-btn');
   const assetBoxes = document.querySelectorAll('.page-work .asset-box');
   if (filterBtns.length > 0 && assetBoxes.length > 0) {
@@ -100,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Custom Brutalist Cursor Logic
+  // Brutalist Custom Cursor
   const cursor = document.getElementById('custom-cursor');
   if (cursor && window.matchMedia("(pointer: fine)").matches) {
     let mouseX = window.innerWidth / 2;
@@ -121,14 +117,72 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     requestAnimationFrame(renderCursor);
 
-    const interactables = document.querySelectorAll('a, button, .asset-box, input, textarea');
+    const interactables = document.querySelectorAll('a, button, .asset-box, input, textarea, .hover-trigger');
     interactables.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
   }
 
-  // 7. AJAX Contact Form Submission
+  // Capabilities List Hover Images Follow Cursor
+  const listItems = document.querySelectorAll('.list-item');
+  if (listItems.length > 0 && window.matchMedia("(pointer: fine)").matches) {
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    listItems.forEach(item => {
+      const imgContainer = item.querySelector('.hover-image-container');
+      if (imgContainer) {
+        let currentX = mouseX, currentY = mouseY;
+        
+        const animateImage = () => {
+          currentX += (mouseX - currentX) * 0.15;
+          currentY += (mouseY - currentY) * 0.15;
+          imgContainer.style.left = `${currentX}px`;
+          imgContainer.style.top = `${currentY}px`;
+          
+          if (item.matches(':hover')) {
+             requestAnimationFrame(animateImage);
+          }
+        };
+
+        item.addEventListener('mouseenter', () => {
+          currentX = mouseX;
+          currentY = mouseY;
+          requestAnimationFrame(animateImage);
+        });
+      }
+    });
+  }
+
+  // Parallax Effect via Object Position
+  const parallaxImages = document.querySelectorAll('.parallax-img');
+  let ticking = false;
+  
+  function updateParallax() {
+    parallaxImages.forEach(img => {
+      const rect = img.getBoundingClientRect();
+      if(rect.top < window.innerHeight && rect.bottom > 0) {
+         const yPos = (rect.top - window.innerHeight/2) * 0.1;
+         img.style.objectPosition = `50% calc(50% + ${yPos}px)`;
+      }
+    });
+    ticking = false;
+  }
+
+  if(parallaxImages.length > 0) {
+     updateParallax();
+     window.addEventListener('scroll', () => {
+       if (!ticking) {
+         window.requestAnimationFrame(updateParallax);
+         ticking = true;
+       }
+     }, { passive: true });
+  }
+
   const contactForm = document.getElementById('contact-form');
   const formMessages = document.getElementById('form-messages');
 
