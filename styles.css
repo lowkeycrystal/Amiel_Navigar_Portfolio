@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 /* Theme Variables - High Contrast Brutalist Light/Dark Mode */
-:root {
+:root, [data-theme="dark"], body[data-theme="dark"] {
   /* Dark Mode (Default) */
   --bg-color: #161616;
   --surface-color: #1a1a1a;
@@ -17,7 +17,7 @@
   --font-mono: 'Space Mono', 'Courier New', Courier, monospace;
 }
 
-[data-theme="light"] {
+:root[data-theme="light"], [data-theme="light"], body[data-theme="light"] {
   /* Light Mode (High Contrast Paper/Ink) */
   --bg-color: #f4f4f0;
   --surface-color: #e8e8e4;
@@ -666,6 +666,29 @@ section {
   font-size: 1.5rem;
   font-weight: 400;
   margin-bottom: 1rem;
+}
+
+/* Added for Experience Detail Section */
+.exp-item-detailed {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.exp-details {
+  max-width: 800px;
+}
+.bullet-list {
+  list-style-type: square;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+.bullet-list li {
+  margin-bottom: 0.5rem;
 }
 
 /* Contact Page */

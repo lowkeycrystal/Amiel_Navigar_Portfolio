@@ -1,14 +1,43 @@
+function getSafeTheme() {
+  try {
+    return localStorage.getItem('theme') || 'dark';
+  } catch (error) {
+    console.warn('localStorage is unavailable, falling back to dark mode.');
+    return 'dark';
+  }
+}
+
+function setSafeTheme(theme) {
+  try {
+    localStorage.setItem('theme', theme);
+  } catch (error) {
+    console.warn('localStorage is unavailable, could not save theme preference.');
+  }
+}
+
+// Apply theme immediately to prevent FOUC
+const currentTheme = getSafeTheme();
+document.documentElement.setAttribute('data-theme', currentTheme);
+
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Theme Toggle Logic (High Contrast Light/Dark Mode)
+  // 1. Theme Toggle Logic (High Contrast Light/Dark Mode) with fallback
   const themeBtn = document.getElementById('theme-toggle');
-  const currentTheme = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', currentTheme);
+  
+  if (document.body) {
+    document.body.setAttribute('data-theme', currentTheme);
+  }
 
   if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    themeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const existingTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = existingTheme === 'dark' ? 'light' : 'dark';
+      
       document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
+      if (document.body) {
+        document.body.setAttribute('data-theme', newTheme);
+      }
+      setSafeTheme(newTheme);
     });
   }
 
