@@ -124,40 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Capabilities List Hover Images Follow Cursor
-  const listItems = document.querySelectorAll('.list-item');
-  if (listItems.length > 0 && window.matchMedia("(pointer: fine)").matches) {
-    let mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-
-    listItems.forEach(item => {
-      const imgContainer = item.querySelector('.hover-image-container');
-      if (imgContainer) {
-        let currentX = mouseX, currentY = mouseY;
-        
-        const animateImage = () => {
-          currentX += (mouseX - currentX) * 0.15;
-          currentY += (mouseY - currentY) * 0.15;
-          imgContainer.style.left = `${currentX}px`;
-          imgContainer.style.top = `${currentY}px`;
-          
-          if (item.matches(':hover')) {
-             requestAnimationFrame(animateImage);
-          }
-        };
-
-        item.addEventListener('mouseenter', () => {
-          currentX = mouseX;
-          currentY = mouseY;
-          requestAnimationFrame(animateImage);
-        });
-      }
-    });
-  }
-
   // Parallax Effect via Object Position
   const parallaxImages = document.querySelectorAll('.parallax-img');
   let ticking = false;
