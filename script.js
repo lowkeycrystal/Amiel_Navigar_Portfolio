@@ -127,4 +127,53 @@ document.addEventListener('DOMContentLoaded', () => {
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
   }
+
+  // 7. AJAX Contact Form Submission
+  const contactForm = document.getElementById('contact-form');
+  const formMessages = document.getElementById('form-messages');
+
+  if (contactForm && formMessages) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = 'SENDING...';
+      submitBtn.disabled = true;
+
+      const formData = new FormData(contactForm);
+
+      fetch(contactForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          contactForm.reset();
+          formMessages.innerHTML = 'Message sent successfully. I will get back to you soon.';
+        } else {
+          return response.json().then(data => {
+            if (data && data.errors) {
+              formMessages.innerHTML = data.errors.map(error => error.message).join(", ");
+            } else {
+              formMessages.innerHTML = 'Oops! There was a problem submitting your form.';
+            }
+          });
+        }
+      })
+      .catch(error => {
+        formMessages.innerHTML = 'Oops! There was a problem submitting your form.';
+      })
+      .finally(() => {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+        setTimeout(() => {
+          formMessages.innerHTML = '';
+        }, 5000);
+      });
+    });
+  }
 });
