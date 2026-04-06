@@ -35,11 +35,33 @@
 
 body {
   background-color: var(--bg-color);
+  background-image: 
+    linear-gradient(rgba(150, 150, 150, var(--grid-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150, 150, 150, var(--grid-opacity)) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-sans);
   line-height: 1.6;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Paper Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+[data-theme="light"] body::before, body[data-theme="light"]::before, :root[data-theme="light"] body::before {
+  opacity: 0.07;
+  mix-blend-mode: multiply;
 }
 
 img, svg, video {
