@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     parallaxImages.forEach(img => {
       const rect = img.getBoundingClientRect();
       if(rect.top < window.innerHeight && rect.bottom > 0) {
-         const yPos = (rect.top - window.innerHeight/2) * 0.1;
+         const yPos = (rect.top - window.innerHeight/2) * 0.04;
          img.style.objectPosition = `50% calc(50% + ${yPos}px)`;
       }
     });
