@@ -19,6 +19,11 @@ const currentTheme = getSafeTheme();
 document.documentElement.setAttribute('data-theme', currentTheme);
 
 document.addEventListener('DOMContentLoaded', () => {
+  const titleTag = document.querySelector('title');
+  if (titleTag && titleTag.textContent) {
+    document.title = titleTag.textContent;
+  }
+
   const themeBtn = document.getElementById('theme-toggle');
   
   if (document.body) {
