@@ -102,6 +102,38 @@ document.addEventListener('DOMContentLoaded', () => {
   if (transitionEl) {
     setTimeout(() => {
       transitionEl.classList.add('is-loaded');
+      
+      const heroSection = document.querySelector('.hero');
+      if (heroSection) {
+        setTimeout(() => {
+          heroSection.classList.add('hero-animated');
+          
+          setTimeout(() => {
+            const typeContainer = document.getElementById('hero-typing-text');
+            const cursor = document.getElementById('hero-cursor');
+            if (typeContainer && cursor) {
+              const textToType = typeContainer.getAttribute('data-text') || '';
+              typeContainer.innerHTML = '';
+              cursor.classList.add('is-typing');
+              let i = 0;
+              const typeWriter = () => {
+                if (i < textToType.length) {
+                  typeContainer.innerHTML += textToType.charAt(i);
+                  i++;
+                  setTimeout(typeWriter, 35);
+                } else {
+                  cursor.classList.remove('is-typing');
+                  cursor.classList.add('blinking');
+                  setTimeout(() => {
+                    cursor.style.display = 'none';
+                  }, 2400);
+                }
+              };
+              typeWriter();
+            }
+          }, 1500); 
+        }, 100);
+      }
     }, 150);
   }
 
@@ -170,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
               foundRow = true;
               break;
             }
-          }
+          } 
           if (!foundRow) {
             rows.set(top, [entry.target]);
           }
