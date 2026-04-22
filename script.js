@@ -305,36 +305,37 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
 
       const formData = new FormData(contactForm);
+      const data = Object.fromEntries(formData.entries());
 
       fetch(contactForm.action, {
         method: 'POST',
-        body: formData,
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify(data)
       })
-      .then(response => {
-        if (response.ok) {
+      .then(response => response.json())
+      .then(data => {
+        if (data.success || data.success === "true") {
           contactForm.reset();
           formMessages.innerHTML = 'Message sent successfully. I will get back to you soon.';
+          formMessages.style.color = "var(--text-primary)";
         } else {
-          return response.json().then(data => {
-            if (data && data.errors) {
-              formMessages.innerHTML = data.errors.map(error => error.message).join(", ");
-            } else {
-              formMessages.innerHTML = 'Oops! There was a problem submitting your form.';
-            }
-          });
+          formMessages.innerHTML = data.message || 'Oops! There was a problem submitting your form.';
+          formMessages.style.color = "var(--accent-color)";
         }
       })
       .catch(error => {
         formMessages.innerHTML = 'Oops! There was a problem submitting your form.';
+        formMessages.style.color = "var(--accent-color)";
       })
       .finally(() => {
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;
         setTimeout(() => {
           formMessages.innerHTML = '';
+          formMessages.style.color = "";
         }, 5000);
       });
     });
