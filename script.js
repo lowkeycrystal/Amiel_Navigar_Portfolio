@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', (e) => {
         filterBtns.forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        
+
         const filterValue = e.target.getAttribute('data-filter');
         assetBoxes.forEach(box => {
           if (filterValue === 'all' || box.getAttribute('data-category') === filterValue) {
