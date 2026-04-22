@@ -51,64 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 150);
   }
 
-  // Work Page Loader
-  const pageLoader = document.getElementById('page-loader');
-  if (pageLoader) {
-    const mediaElements = document.querySelectorAll('.page-work .asset-media');
-    let loadedCount = 0;
-    const totalMedia = mediaElements.length;
-    const progressBar = document.getElementById('loader-progress-bar');
-    
-    const hideLoader = () => {
-      pageLoader.classList.add('is-hidden');
-    };
-
-    const updateProgress = () => {
-      if (progressBar) {
-        const percent = totalMedia > 0 ? (loadedCount / totalMedia) * 100 : 100;
-        progressBar.style.width = `${percent}%`;
-      }
-    };
-
-    if (totalMedia === 0) {
-      updateProgress();
-      setTimeout(hideLoader, 500);
-    } else {
-      const checkAllLoaded = () => {
-        loadedCount++;
-        updateProgress();
-        if (loadedCount >= totalMedia) {
-          setTimeout(hideLoader, 600);
-        }
-      };
-
-      mediaElements.forEach(media => {
-        if (media.tagName.toLowerCase() === 'img') {
-          if (media.complete) {
-            checkAllLoaded();
-          } else {
-            media.addEventListener('load', checkAllLoaded);
-            media.addEventListener('error', checkAllLoaded);
-          }
-        } else if (media.tagName.toLowerCase() === 'video') {
-          if (media.readyState >= 3) {
-            checkAllLoaded();
-          } else {
-            const handleVideoLoad = () => {
-              checkAllLoaded();
-              media.removeEventListener('canplay', handleVideoLoad);
-            };
-            media.addEventListener('canplay', handleVideoLoad);
-            media.addEventListener('error', checkAllLoaded);
-          }
-        }
-      });
-      
-      // Fallback in case a resource hangs
-      setTimeout(hideLoader, 8000);
-    }
-  }
-
   const header = document.getElementById('main-header');
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -138,17 +80,155 @@ document.addEventListener('DOMContentLoaded', () => {
   const animatedElements = document.querySelectorAll('.fade-in-up, .slide-up-group');
   animatedElements.forEach(el => observer.observe(el));
 
+  // Work Page Loader & Staggered Row Animation
+  const pageLoader = document.getElementById('page-loader');
+  if (pageLoader) {
+    const assetBoxes = Array.from(document.querySelectorAll('.page-work .asset-box'));
+    
+    // Set initial state for stagger animation
+    assetBoxes.forEach(box => {
+      box.style.opacity = '0';
+      box.style.transform = 'translateY(30px)';
+      box.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
+
+    const mediaElements = Array.from(document.querySelectorAll('.page-work .asset-media'));
+    
+    // Optimize videos by preventing simultaneous loading
+    const videoElements = mediaElements.filter(el => el.tagName.toLowerCase() === 'video');
+    videoElements.forEach((vid, index) => {
+      if (index > 3) {
+        vid.removeAttribute('autoplay');
+        vid.setAttribute('preload', 'none');
+      }
+    });
+
+    // Setup Intersection Observer to animate items row by row
+    const animateObserver = new IntersectionObserver((entries, observer) => {
+      const rows = new Map();
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const top = Math.round(entry.boundingClientRect.top);
+          let foundRow = false;
+          for (let [rowTop, items] of rows.entries()) {
+            if (Math.abs(rowTop - top) < 40) { // 40px tolerance for row alignment
+              items.push(entry.target);
+              foundRow = true;
+              break;
+            }
+          }
+          if (!foundRow) {
+            rows.set(top, [entry.target]);
+          }
+          observer.unobserve(entry.target);
+          
+          // Lazy play videos
+          const video = entry.target.querySelector('video');
+          if (video && video.hasAttribute('preload')) {
+             video.setAttribute('preload', 'auto');
+             video.play().catch(e => console.warn('Autoplay prevented:', e));
+          }
+        }
+      });
+      
+      if (rows.size > 0) {
+        const sortedRows = Array.from(rows.keys()).sort((a, b) => a - b);
+        sortedRows.forEach((rowTop, rowIndex) => {
+          const items = rows.get(rowTop);
+          items.forEach(item => {
+             // Delay based on row index to stagger downwards
+             item.style.transitionDelay = `${rowIndex * 0.15}s`;
+             requestAnimationFrame(() => {
+               item.style.opacity = '1';
+               item.style.transform = 'translateY(0)';
+             });
+          });
+        });
+      }
+    }, { rootMargin: '100px 0px', threshold: 0.05 });
+
+    // Handle loader logic (wait for first 6 items only to prevent long blank screens)
+    let loadedCount = 0;
+    const mediaToLoad = mediaElements.slice(0, 6);
+    const totalMedia = mediaToLoad.length;
+    const progressBar = document.getElementById('loader-progress-bar');
+    
+    const triggerAnimations = () => {
+      assetBoxes.forEach(box => animateObserver.observe(box));
+    };
+
+    const hideLoader = () => {
+      pageLoader.classList.add('is-hidden');
+      setTimeout(triggerAnimations, 100);
+    };
+
+    const updateProgress = () => {
+      if (progressBar) {
+        const percent = totalMedia > 0 ? (loadedCount / totalMedia) * 100 : 100;
+        progressBar.style.width = `${percent}%`;
+      }
+    };
+
+    if (totalMedia === 0) {
+      updateProgress();
+      setTimeout(hideLoader, 300);
+    } else {
+      let loaderDone = false;
+      const checkAllLoaded = () => {
+        if (loaderDone) return;
+        loadedCount++;
+        updateProgress();
+        if (loadedCount >= totalMedia) {
+          loaderDone = true;
+          setTimeout(hideLoader, 400);
+        }
+      };
+
+      mediaToLoad.forEach(media => {
+        if (media.tagName.toLowerCase() === 'img') {
+          if (media.complete) {
+            checkAllLoaded();
+          } else {
+            media.addEventListener('load', checkAllLoaded);
+            media.addEventListener('error', checkAllLoaded);
+          }
+        } else if (media.tagName.toLowerCase() === 'video') {
+          if (media.readyState >= 3) {
+            checkAllLoaded();
+          } else {
+            const handleVideoLoad = () => {
+              checkAllLoaded();
+              media.removeEventListener('canplay', handleVideoLoad);
+            };
+            media.addEventListener('canplay', handleVideoLoad);
+            media.addEventListener('error', checkAllLoaded);
+          }
+        }
+      });
+      
+      // Fallback timeout: 2.5 seconds max
+      setTimeout(() => {
+        if (!loaderDone) {
+          loaderDone = true;
+          hideLoader();
+        }
+      }, 2500);
+    }
+  }
+
   // Work Page Filters
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const assetBoxes = document.querySelectorAll('.page-work .asset-box');
-  if (filterBtns.length > 0 && assetBoxes.length > 0) {
+  const assetBoxesFilters = document.querySelectorAll('.page-work .asset-box');
+  if (filterBtns.length > 0 && assetBoxesFilters.length > 0) {
     filterBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         filterBtns.forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
 
         const filterValue = e.target.getAttribute('data-filter');
-        assetBoxes.forEach(box => {
+        assetBoxesFilters.forEach(box => {
+          // Reset transition delay so hiding/showing isn't staggered weirdly
+          box.style.transitionDelay = '0s';
           if (filterValue === 'all' || box.getAttribute('data-category') === filterValue) {
             box.classList.remove('hidden');
           } else {
