@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lowkeycrystal.github.io/Amiel_Navigar_Portfolio/sitemap.xml

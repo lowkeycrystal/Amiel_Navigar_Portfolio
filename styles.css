@@ -21,7 +21,7 @@
   --surface-color: #e8e8e4;
   --text-primary: #0a0a0a;
   --text-muted: #555555;
-  --accent-color: #ff3300;
+  --accent-color: #c83a16;
   --border-color: #c0c0bc;
   --grid-opacity: 0.06;
   --glass-bg: rgba(244, 244, 240, 0.8);
@@ -76,7 +76,7 @@ a {
 }
 
 /* Keyboard Accessibility */
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 4px;
 }
@@ -309,8 +309,8 @@ section { padding: 4rem 0; }
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -576,6 +576,14 @@ section { padding: 4rem 0; }
   color: #f0f0f0;
 }
 .asset-box:hover .project-hover { opacity: 1; transform: translateY(0); }
+.video-card .project-hover {
+  opacity: 1;
+  transform: translateY(0);
+  background: linear-gradient(145deg, rgba(214, 90, 49, 0.14), rgba(0, 0, 0, 0.92));
+}
+.video-card .project-summary { opacity: 1; transform: translateY(0); }
+.video-card video { opacity: 0.35; }
+.video-card:hover video, .video-card:focus-visible video { opacity: 0.82; }
 .project-title {
   font-family: var(--font-mono);
   font-size: 1.1rem;
@@ -697,7 +705,8 @@ section { padding: 4rem 0; }
   color: var(--text-primary);
   padding: 0.4rem 0.8rem;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
+  min-height: 40px;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -765,7 +774,7 @@ section { padding: 4rem 0; }
 .contact-item { display: flex; align-items: center; gap: 1rem; }
 .contact-item .label { margin-bottom: 0; }
 .contact-form .form-group { margin-bottom: 2rem; }
-.contact-form input, .contact-form textarea {
+.contact-form input, .contact-form select, .contact-form textarea {
   width: 100%;
   background: transparent;
   border: none;
@@ -777,8 +786,24 @@ section { padding: 4rem 0; }
   transition: border-color 0.3s ease;
   resize: none;
 }
-.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--accent-color); }
+.contact-form select {
+  appearance: none;
+  cursor: pointer;
+  border-radius: 0;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--accent-color) 50%),
+    linear-gradient(135deg, var(--accent-color) 50%, transparent 50%);
+  background-position:
+    calc(100% - 15px) calc(50% - 2px),
+    calc(100% - 10px) calc(50% - 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.contact-form select option { background: var(--surface-color); color: var(--text-primary); }
+.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { outline: none; border-color: var(--accent-color); }
 .contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--text-muted); }
+.contact-email { text-decoration: underline; text-underline-offset: 0.3em; }
+.contact-email:hover { color: var(--text-primary); }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--border-color); padding: 4rem 0 2rem 0; margin-top: 4rem; }
@@ -846,4 +871,22 @@ span.reveal-fade-text {
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .page-transition, .page-loader, .custom-cursor { display: none !important; }
+  .fade-in-up, .reveal-fade-text, .reveal-text, .page-work .asset-box {
+    opacity: 1 !important;
+    transform: none !important;
+    transition-delay: 0s !important;
+  }
+  .marquee-content { animation: none !important; }
+  body, a, button, .asset-box, input, select, textarea, .hover-trigger { cursor: auto !important; }
 }

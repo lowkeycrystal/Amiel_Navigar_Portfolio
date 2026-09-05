@@ -70,14 +70,10 @@ class TextScramble {
 }
 
 const currentTheme = getSafeTheme();
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.setAttribute('data-theme', currentTheme);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const titleTag = document.querySelector('title');
-  if (titleTag && titleTag.textContent) {
-    document.title = titleTag.textContent;
-  }
-
   const themeBtn = document.getElementById('theme-toggle');
   
   if (document.body) {
@@ -85,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (themeBtn) {
+    themeBtn.setAttribute('aria-pressed', String(currentTheme === 'light'));
     themeBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const existingTheme = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -94,12 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (document.body) {
         document.body.setAttribute('data-theme', newTheme);
       }
+      themeBtn.setAttribute('aria-pressed', String(newTheme === 'light'));
       setSafeTheme(newTheme);
     });
   }
 
   const transitionEl = document.querySelector('.page-transition');
-  if (transitionEl) {
+  if (transitionEl && !prefersReducedMotion) {
     setTimeout(() => {
       transitionEl.classList.add('is-loaded');
       
@@ -135,10 +133,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
       }
     }, 150);
+  } else if (transitionEl) {
+    transitionEl.classList.add('is-loaded');
+    document.querySelector('.hero')?.classList.add('hero-animated');
+    const typeContainer = document.getElementById('hero-typing-text');
+    const cursor = document.getElementById('hero-cursor');
+    if (typeContainer) {
+      typeContainer.textContent = typeContainer.getAttribute('data-text') || '';
+    }
+    if (cursor) {
+      cursor.style.display = 'none';
+    }
   }
 
   const header = document.getElementById('main-header');
   const handleScroll = () => {
+    if (!header) return;
     if (window.scrollY > 50) {
       header.classList.add('scrolled');
     } else {
@@ -180,15 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const mediaElements = Array.from(document.querySelectorAll('.page-work .asset-media'));
     
-    // Optimize videos by preventing simultaneous loading
-    const videoElements = mediaElements.filter(el => el.tagName.toLowerCase() === 'video');
-    videoElements.forEach((vid, index) => {
-      if (index > 3) {
-        vid.removeAttribute('autoplay');
-        vid.setAttribute('preload', 'none');
-      }
-    });
-
     // Setup Intersection Observer to animate items row by row
     const animateObserver = new IntersectionObserver((entries, observer) => {
       const rows = new Map();
@@ -208,12 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           observer.unobserve(entry.target);
           
-          // Lazy play videos
-          const video = entry.target.querySelector('video');
-          if (video && video.hasAttribute('preload')) {
-             video.setAttribute('preload', 'auto');
-             video.play().catch(e => console.warn('Autoplay prevented:', e));
-          }
         }
       });
       
@@ -279,14 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
             media.addEventListener('error', checkAllLoaded);
           }
         } else if (media.tagName.toLowerCase() === 'video') {
-          if (media.readyState >= 3) {
+          if (media.readyState >= 1) {
             checkAllLoaded();
           } else {
             const handleVideoLoad = () => {
               checkAllLoaded();
-              media.removeEventListener('canplay', handleVideoLoad);
+              media.removeEventListener('loadedmetadata', handleVideoLoad);
             };
-            media.addEventListener('canplay', handleVideoLoad);
+            media.addEventListener('loadedmetadata', handleVideoLoad);
             media.addEventListener('error', checkAllLoaded);
           }
         }
@@ -306,12 +301,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const assetBoxesFilters = document.querySelectorAll('.page-work .asset-box');
   if (filterBtns.length > 0 && assetBoxesFilters.length > 0) {
+    filterBtns.forEach(btn => btn.setAttribute('aria-pressed', String(btn.classList.contains('active'))));
     filterBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        e.currentTarget.classList.add('active');
+        e.currentTarget.setAttribute('aria-pressed', 'true');
 
-        const filterValue = e.target.getAttribute('data-filter');
+        const filterValue = e.currentTarget.getAttribute('data-filter');
         assetBoxesFilters.forEach(box => {
           // Reset transition delay so hiding/showing isn't staggered weirdly
           box.style.transitionDelay = '0s';
@@ -325,9 +325,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Preview motion only after deliberate hover or keyboard focus.
+  const previewVideos = document.querySelectorAll('.asset-box video, .about-snippet video');
+  previewVideos.forEach(video => {
+    const trigger = video.closest('.asset-box') || video;
+    const playPreview = () => {
+      if (!prefersReducedMotion) {
+        video.play().catch(() => {});
+      }
+    };
+    const pausePreview = () => video.pause();
+    trigger.addEventListener('pointerenter', playPreview);
+    trigger.addEventListener('focusin', playPreview);
+    trigger.addEventListener('pointerleave', pausePreview);
+    trigger.addEventListener('focusout', pausePreview);
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      previewVideos.forEach(video => video.pause());
+    }
+  });
+
   // Brutalist Custom Cursor
   const cursor = document.getElementById('custom-cursor');
-  if (cursor && window.matchMedia("(pointer: fine)").matches) {
+  if (cursor && !prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let cursorX = mouseX;
@@ -346,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     requestAnimationFrame(renderCursor);
 
-    const interactables = document.querySelectorAll('a, button, .asset-box, input, textarea, .hover-trigger');
+    const interactables = document.querySelectorAll('a, button, .asset-box, input, select, textarea, .hover-trigger');
     interactables.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -368,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ticking = false;
   }
 
-  if(parallaxImages.length > 0) {
+  if(parallaxImages.length > 0 && !prefersReducedMotion) {
      updateParallax();
      window.addEventListener('scroll', () => {
        if (!ticking) {
@@ -379,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Text Scramble Setup
-  document.querySelectorAll('.asset-box').forEach(box => {
+  if (!prefersReducedMotion) document.querySelectorAll('.asset-box').forEach(box => {
     const title = box.querySelector('.project-title');
     if (title) {
       const fx = new TextScramble(title);
@@ -394,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.querySelectorAll('.interactive-list .list-item').forEach(item => {
+  if (!prefersReducedMotion) document.querySelectorAll('.interactive-list .list-item').forEach(item => {
     const title = item.querySelector('.list-title');
     if (title) {
       const fx = new TextScramble(title);
@@ -472,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     backToTop.addEventListener('click', () => {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
       });
     });
   }
