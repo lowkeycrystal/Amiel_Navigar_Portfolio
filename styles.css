@@ -682,6 +682,168 @@ section { padding: 4rem 0; }
 .media-showcase-inner { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
 .asset-media-contain { max-width: 100%; max-height: 70vh; object-fit: contain; }
 
+/* Project video preview */
+.project-video-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(22rem, 48vw, 38rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: #090909;
+}
+
+.project-video-stage .project-video-element {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  background: #050505;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+}
+
+.project-video-stage.has-video-cover .project-video-element { opacity: 0; }
+.project-video-stage.is-playing .project-video-element { opacity: 1; }
+
+.project-video-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1.5rem, 4vw, 4rem);
+  border: 0;
+  color: #f3f3f3;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: #111;
+  background-image:
+    radial-gradient(circle at 82% 22%, rgba(214, 90, 49, 0.26), transparent 34%),
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(135deg, #181818 0%, #101010 58%, #17100e 100%);
+  background-size: auto, 36px 36px, 36px 36px, auto;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.project-video-cover::before {
+  content: '';
+  position: absolute;
+  right: clamp(1.5rem, 4vw, 4rem);
+  top: 50%;
+  width: clamp(7rem, 16vw, 13rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(214, 90, 49, 0.36);
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.project-video-cover:hover::before,
+.project-video-cover:focus-visible::before {
+  border-color: var(--accent-color);
+  transform: translateY(-50%) rotate(52deg) scale(1.04);
+}
+
+.project-video-cover.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.video-cover-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.video-cover-kicker { color: var(--accent-color); }
+.video-cover-status { color: rgba(243, 243, 243, 0.58); }
+
+.video-cover-title {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  max-width: 72%;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.2vw, 6.75rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.video-cover-action {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.video-cover-play {
+  display: grid;
+  place-items: center;
+  width: clamp(3.75rem, 6vw, 5rem);
+  aspect-ratio: 1;
+  color: #fff;
+  background: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  box-shadow: 0.55rem 0.55rem 0 rgba(0, 0, 0, 0.34);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-video-cover:hover .video-cover-play,
+.project-video-cover:focus-visible .video-cover-play {
+  transform: translate(-0.2rem, -0.2rem);
+  box-shadow: 0.75rem 0.75rem 0 rgba(0, 0, 0, 0.4);
+}
+
+.video-cover-action-copy { display: grid; gap: 0.25rem; }
+.video-cover-action-label {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.video-cover-hint {
+  color: rgba(243, 243, 243, 0.58);
+  font-size: 0.9rem;
+}
+
+.project-video-stage.is-loading .video-cover-play svg {
+  animation: video-pulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes video-pulse {
+  to { opacity: 0.35; transform: scale(0.82); }
+}
+
+@media (max-width: 640px) {
+  .project-video-stage {
+    height: clamp(15rem, 72vw, 20rem);
+  }
+  .project-video-cover { padding: 1.25rem; }
+  .project-video-cover::before {
+    right: 1.5rem;
+    width: 7rem;
+  }
+  .video-cover-title {
+    max-width: 88%;
+    font-size: clamp(2rem, 9.5vw, 3.25rem);
+  }
+  .video-cover-status,
+  .video-cover-hint { display: none; }
+}
+
 .media-gallery-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 768px) { .media-gallery-grid { grid-template-columns: repeat(2, 1fr); } }
 

@@ -347,6 +347,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Give project videos an intentional, lightweight preview before media loads.
+  const projectVideos = document.querySelectorAll('.project-media video[controls]');
+  projectVideos.forEach(video => {
+    const stage = video.closest('.media-showcase-inner');
+    if (!stage || stage.querySelector('.project-video-cover')) return;
+
+    const rawTitle = document.querySelector('.project-hero .mega-title')?.innerText || 'Project video';
+    const projectTitle = rawTitle.replace(/\s+/g, ' ').trim();
+
+    stage.classList.add('project-video-stage', 'has-video-cover');
+    video.classList.add('project-video-element');
+    video.controls = false;
+    video.tabIndex = -1;
+    video.setAttribute('aria-hidden', 'true');
+
+    const cover = document.createElement('button');
+    cover.type = 'button';
+    cover.className = 'project-video-cover';
+    cover.setAttribute('aria-label', `Play ${projectTitle}`);
+    cover.innerHTML = `
+      <span class="video-cover-top">
+        <span class="video-cover-kicker">[ PROJECT FILM ]</span>
+        <span class="video-cover-status">READY TO PLAY</span>
+      </span>
+      <span class="video-cover-title"></span>
+      <span class="video-cover-action">
+        <span class="video-cover-play" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="video-cover-action-copy">
+          <span class="video-cover-action-label">PLAY FILM</span>
+          <span class="video-cover-hint">Loads on demand · Sound available</span>
+        </span>
+      </span>
+    `;
+
+    cover.querySelector('.video-cover-title').textContent = projectTitle;
+    const actionLabel = cover.querySelector('.video-cover-action-label');
+    const hint = cover.querySelector('.video-cover-hint');
+    stage.appendChild(cover);
+
+    const revealPlayer = () => {
+      stage.classList.remove('is-loading', 'has-video-cover');
+      stage.classList.add('is-playing');
+      cover.classList.add('is-hidden');
+      cover.setAttribute('aria-hidden', 'true');
+      video.controls = true;
+      video.removeAttribute('aria-hidden');
+      video.removeAttribute('tabindex');
+    };
+
+    cover.addEventListener('click', () => {
+      if (stage.classList.contains('is-loading')) return;
+
+      stage.classList.add('is-loading');
+      cover.setAttribute('aria-busy', 'true');
+      actionLabel.textContent = 'LOADING FILM';
+      hint.textContent = 'Preparing the player…';
+      video.controls = true;
+      video.removeAttribute('aria-hidden');
+
+      if (video.readyState === 0) video.load();
+      const playAttempt = video.play();
+      if (playAttempt) {
+        playAttempt.catch(() => {
+          revealPlayer();
+          video.focus({ preventScroll: true });
+        });
+      }
+    });
+
+    video.addEventListener('playing', revealPlayer, { once: true });
+    video.addEventListener('error', () => {
+      stage.classList.remove('is-loading');
+      cover.removeAttribute('aria-busy');
+      cover.disabled = false;
+      actionLabel.textContent = 'TRY AGAIN';
+      hint.textContent = 'The video could not load. Check your connection.';
+    });
+  });
+
   // Brutalist Custom Cursor
   const cursor = document.getElementById('custom-cursor');
   if (cursor && !prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
