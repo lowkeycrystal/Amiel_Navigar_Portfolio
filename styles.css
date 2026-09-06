@@ -583,7 +583,83 @@ section { padding: 4rem 0; }
 }
 .video-card .project-summary { opacity: 1; transform: translateY(0); }
 .video-card video { opacity: 0.35; }
+.video-card video[poster] {
+  opacity: 0.62;
+  filter: saturate(0.9) contrast(1.04);
+}
 .video-card:hover video, .video-card:focus-visible video { opacity: 0.82; }
+.video-card::after {
+  content: '';
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  aspect-ratio: 1;
+  background-color: rgba(12, 12, 12, 0.72);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f3f3f3' d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 0.9rem;
+  border: 1px solid rgba(243, 243, 243, 0.38);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+.video-card:hover::after,
+.video-card:focus-visible::after {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  transform: translate(-0.18rem, -0.18rem);
+}
+
+.video-fallback-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0;
+  color: #fff;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+.video-fallback-art::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transform: rotate(-4deg);
+}
+.video-fallback-art span,
+.video-fallback-art em {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-style: normal;
+  letter-spacing: 0.18em;
+}
+.video-fallback-art strong {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 7rem);
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+}
+.video-card-fallback--pf44 .video-fallback-art {
+  background:
+    radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.2), transparent 24%),
+    linear-gradient(135deg, #f36a2b, #d83420 60%, #7f1717);
+}
+.video-card-fallback--pf66 .video-fallback-art {
+  background:
+    radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.2), transparent 24%),
+    linear-gradient(135deg, #3e2c89, #8d2a91 52%, #ef5f4d);
+}
 .project-title {
   font-family: var(--font-mono);
   font-size: 1.1rem;

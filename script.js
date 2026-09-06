@@ -327,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Preview motion only after deliberate hover or keyboard focus.
   const previewVideos = document.querySelectorAll('.asset-box video, .about-snippet video');
+  const supportsHoverPreview = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   previewVideos.forEach(video => {
     const trigger = video.closest('.asset-box') || video;
     const playPreview = () => {
@@ -335,9 +336,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
     const pausePreview = () => video.pause();
-    trigger.addEventListener('pointerenter', playPreview);
+    if (supportsHoverPreview) trigger.addEventListener('pointerenter', playPreview);
     trigger.addEventListener('focusin', playPreview);
-    trigger.addEventListener('pointerleave', pausePreview);
+    if (supportsHoverPreview) trigger.addEventListener('pointerleave', pausePreview);
     trigger.addEventListener('focusout', pausePreview);
   });
 
