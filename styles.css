@@ -341,11 +341,19 @@ section { padding: 4rem 0; }
     padding-bottom: 0.25rem;
     padding-right: 2rem;
   }
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
   .nav-links li:last-child {
     position: absolute;
     top: 0;
     right: 0;
   }
+  .theme-toggle { width: 44px; height: 44px; }
+  main { padding-top: 145px; }
+  .hero-title { font-size: clamp(2.65rem, 12vw, 3.25rem); }
 }
 
 /* Elements */
@@ -722,6 +730,8 @@ section { padding: 4rem 0; }
   border-bottom: 1px solid var(--border-color);
   position: relative;
   cursor: pointer;
+  color: inherit;
+  text-decoration: none;
   transition: padding-left 0.4s ease, padding-right 0.4s ease;
 }
 @media (min-width: 768px) { .list-item { grid-template-columns: auto 2fr 1fr auto; } }
@@ -729,9 +739,12 @@ section { padding: 4rem 0; }
 .list-desc { margin-bottom: 0; }
 .list-arrow { opacity: 0; transform: translateX(-20px); transition: all 0.4s ease; }
 @media (min-width: 768px) {
-  .list-item:hover { padding-left: 2rem; padding-right: 2rem; }
-  .list-item:hover .list-title { color: var(--accent-color); }
-  .list-item:hover .list-arrow { opacity: 1; transform: translateX(0); }
+  .list-item:hover,
+  .list-item:focus-visible { padding-left: 2rem; padding-right: 2rem; }
+  .list-item:hover .list-title,
+  .list-item:focus-visible .list-title { color: var(--accent-color); }
+  .list-item:hover .list-arrow,
+  .list-item:focus-visible .list-arrow { opacity: 1; transform: translateX(0); }
 }
 
 /* Project Specifics */
