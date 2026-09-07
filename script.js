@@ -323,6 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
     });
+
+    const requestedFilter = new URLSearchParams(window.location.search).get('filter');
+    const requestedButton = Array.from(filterBtns).find(btn => btn.getAttribute('data-filter') === requestedFilter);
+    if (requestedButton) requestedButton.click();
   }
 
   // Preview motion only after deliberate hover or keyboard focus.
