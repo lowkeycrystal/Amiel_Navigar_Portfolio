@@ -299,8 +299,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Work Page Filters
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const assetBoxesFilters = document.querySelectorAll('.page-work .asset-box');
+  const assetBoxesFilters = Array.from(document.querySelectorAll('.page-work .asset-box'));
+  const galleryGrid = document.querySelector('.page-work .gallery-grid');
   if (filterBtns.length > 0 && assetBoxesFilters.length > 0) {
+    assetBoxesFilters.forEach((box, index) => {
+      const yearMatch = box.querySelector('.project-year')?.textContent.match(/\b(20\d{2})\b/);
+      box.dataset.year = yearMatch ? yearMatch[1] : '0';
+      box.dataset.originalOrder = String(index);
+    });
+
     filterBtns.forEach(btn => btn.setAttribute('aria-pressed', String(btn.classList.contains('active'))));
     filterBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -312,21 +319,36 @@ document.addEventListener('DOMContentLoaded', () => {
         e.currentTarget.setAttribute('aria-pressed', 'true');
 
         const filterValue = e.currentTarget.getAttribute('data-filter');
+        if (galleryGrid) {
+          assetBoxesFilters
+            .sort((a, b) => Number(b.dataset.year) - Number(a.dataset.year) || Number(a.dataset.originalOrder) - Number(b.dataset.originalOrder))
+            .forEach(box => galleryGrid.appendChild(box));
+        }
+
         assetBoxesFilters.forEach(box => {
           // Reset transition delay so hiding/showing isn't staggered weirdly
           box.style.transitionDelay = '0s';
-          if (filterValue === 'all' || box.getAttribute('data-category') === filterValue) {
+          const categories = (box.getAttribute('data-category') || '').split(/\s+/);
+          if (filterValue === 'all' || categories.includes(filterValue)) {
             box.classList.remove('hidden');
           } else {
             box.classList.add('hidden');
           }
         });
+
+        const currentUrl = new URL(window.location.href);
+        if (filterValue === 'all') {
+          currentUrl.searchParams.delete('filter');
+        } else {
+          currentUrl.searchParams.set('filter', filterValue);
+        }
+        window.history.replaceState({}, '', `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`);
       });
     });
 
     const requestedFilter = new URLSearchParams(window.location.search).get('filter');
     const requestedButton = Array.from(filterBtns).find(btn => btn.getAttribute('data-filter') === requestedFilter);
-    if (requestedButton) requestedButton.click();
+    (requestedButton || filterBtns[0]).click();
   }
 
   // Preview motion only after deliberate hover or keyboard focus.
